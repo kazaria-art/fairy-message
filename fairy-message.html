@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日の光メッセージ ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fairy-pink:   #f9c8d8;
+  --fairy-yellow: #fef0b0;
+  --fairy-mint:   #b8eed8;
+  --fairy-lavend: #d8c8f0;
+  --fairy-sky:    #b8e0f4;
+  --fairy-peach:  #fdd0a8;
+  --text-main:    #6a5a7a;
+  --text-sub:     #9a88aa;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  background:
+    radial-gradient(ellipse at 20% 10%, #ffe8f4 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, #e0effe 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 90%, #e8fce8 0%, transparent 50%),
+    #faf6ff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  color: var(--text-main);
+}
+
+/* Floating dots background */
+.bg-dots {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.bg-dots span {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.18;
+  animation: floatDot linear infinite;
+}
+
+@keyframes floatDot {
+  0%   { transform: translateY(0) scale(1); opacity: 0.1; }
+  50%  { opacity: 0.25; }
+  100% { transform: translateY(-100vh) scale(0.6); opacity: 0; }
+}
+
+/* Pages */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 0 16px 40px;
+}
+
+#page-main { display: block; }
+#page-result { display: none; }
+
+/* === MAIN PAGE === */
+.main-header {
+  text-align: center;
+  padding: 40px 0 12px;
+}
+
+.main-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.main-header .sub {
+  margin-top: 10px;
+  font-size: 15px;
+  color: var(--text-sub);
+  line-height: 1.8;
+}
+
+.ribbon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 6px 0 4px;
+}
+.ribbon-line {
+  flex: 1;
+  max-width: 60px;
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, #e0b8d8);
+  border-radius: 2px;
+}
+.ribbon-line.right {
+  background: linear-gradient(to left, transparent, #e0b8d8);
+}
+.ribbon-text {
+  font-size: 11px;
+  color: #c0a0c8;
+  letter-spacing: 0.1em;
+}
+
+/* Cards grid */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 480px;
+  margin: 24px auto 0;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 0 0 16px;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s;
+  box-shadow: 0 2px 12px rgba(180,140,200,0.12), 0 1px 4px rgba(180,140,200,0.08);
+  border: 1.5px solid rgba(255,255,255,0.9);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  opacity: 0.35;
+  transition: opacity 0.25s;
+  z-index: 0;
+}
+
+.card-heal::before   { background: radial-gradient(circle at 60% 30%, var(--fairy-pink), transparent 70%); }
+.card-fun::before    { background: radial-gradient(circle at 40% 30%, var(--fairy-yellow), transparent 70%); }
+.card-go::before     { background: radial-gradient(circle at 60% 30%, var(--fairy-peach), transparent 70%); }
+.card-calm::before   { background: radial-gradient(circle at 40% 30%, var(--fairy-lavend), transparent 70%); }
+.card-energy::before { background: radial-gradient(circle at 60% 30%, var(--fairy-mint), transparent 70%); }
+.card-conf::before   { background: radial-gradient(circle at 40% 30%, var(--fairy-sky), transparent 70%); }
+
+.card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(180,140,200,0.22), 0 4px 10px rgba(180,140,200,0.14);
+}
+.card:active { transform: scale(0.96); }
+
+.fairy-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0 0 10px;
+  overflow: hidden;
+  border-radius: 22px 22px 0 0;
+}
+.fairy-wrap img {
+  width: 100%; height: 100%;
+  object-fit: contain; /* changed from cover for full character visibility */
+  display: block;
+  padding: 10px;
+}
+
+.card .label {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0 8px;
+}
+
+/* === RESULT PAGE === */
+#page-result {
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+  text-align: center;
+}
+
+.result-scene {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: 0 auto;
+}
+
+.result-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: pulse-halo 3s ease-in-out infinite;
+}
+
+@keyframes pulse-halo {
+  0%,100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.08); opacity: 0.85; }
+}
+
+.result-fairy-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.result-fairy-wrap img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(200,160,240,0.25));
+}
+
+.fairy-pop {
+  animation: fairy-pop-in 0.7s cubic-bezier(.22,.8,.36,1) forwards,
+             fairy-float 4s ease-in-out 0.7s infinite;
+}
+@keyframes fairy-pop-in {
+  0%   { opacity: 0; transform: scale(0.4) translateY(40px); }
+  60%  { opacity: 1; transform: scale(1.12) translateY(-8px); }
+  80%  { transform: scale(0.96) translateY(2px); }
+  100% { transform: scale(1) translateY(0); }
+}
+@keyframes fairy-float {
+  0%,100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-12px) rotate(1deg); }
+}
+
+/* Number badge */
+.number-badge-wrap { margin: 16px 0 4px; }
+.number-label {
+  font-size: 12px;
+  color: var(--text-sub);
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+}
+.number-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 36px;
+  font-weight: 700;
+  background: white;
+  box-shadow: 0 4px 18px rgba(200,160,240,0.25);
+  border: 3px solid rgba(255,255,255,0.9);
+  transition: color 0.4s;
+}
+
+/* Sparkles */
+.sparkles {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+.sp {
+  width: 10px; height: 10px; border-radius: 50%;
+  animation: sparkle-anim 1.4s ease-in-out infinite;
+}
+.sp:nth-child(2) { animation-delay: 0.2s; }
+.sp:nth-child(3) { animation-delay: 0.4s; }
+@keyframes sparkle-anim {
+  0%,100% { transform: scale(0.6); opacity: 0.3; }
+  50%      { transform: scale(1.2); opacity: 1; }
+}
+
+/* Message card */
+.message-card {
+  background: white;
+  border-radius: 28px;
+  padding: 30px 24px 24px;
+  max-width: 360px;
+  width: 92%;
+  margin: 0 auto;
+  box-shadow: 0 4px 22px rgba(180,140,200,0.14);
+  position: relative;
+}
+
+.message-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  border-radius: 28px 28px 0 0;
+  background: linear-gradient(to right, #f9c8d8, #d8c8f0, #b8e0f4);
+  transition: background 0.4s;
+  id: cardTopColor;
+}
+
+.deco-quote {
+  position: absolute;
+  top: 12px; left: 20px;
+  font-size: 48px;
+  line-height: 1;
+  color: #f0e6f6;
+  font-family: Georgia, serif;
+}
+
+.message-speech {
+  position: relative;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.message-desc {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-sub);
+  text-align: left;
+  border-top: 1.5px dashed #f0e6f6;
+  padding-top: 16px;
+}
+
+/* Back button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 50px;
+  background: white;
+  color: var(--text-main);
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(180,140,200,0.2);
+  transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+}
+.back-btn:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 7px 22px rgba(180,140,200,0.28);
+}
+.back-btn:active { transform: scale(0.95); }
+
+/* Page transition */
+.page-enter { animation: page-in 0.55s cubic-bezier(.22,.8,.36,1) forwards; }
+.page-leave { animation: page-out 0.35s ease-in forwards; }
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes page-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.04); }
+}
+
+/* Deco leaves */
+.deco-leaves {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.deco-leaf { position: absolute; opacity: 0.15; }
+</style>
+</head>
+<body>
+
+<div class="bg-dots" id="bgDots"></div>
+
+<div class="deco-leaves">
+  <svg class="deco-leaf" style="top:-20px;left:-20px;width:160px" viewBox="0 0 120 120">
+    <ellipse cx="60" cy="60" rx="55" ry="30" fill="#d8f0c8" transform="rotate(-40 60 60)"/>
+  </svg>
+  <svg class="deco-leaf" style="bottom:-30px;right:-30px;width:180px" viewBox="0 0 120 120">
+    <ellipse cx="60" cy="60" rx="52" ry="28" fill="#f8d0e8" transform="rotate(30 60 60)"/>
+  </svg>
+</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<div class="page" id="page-main">
+  <div class="main-header">
+    <h1>✨ 今日の光メッセージ ✨</h1>
+    <div class="ribbon-wrap">
+      <div class="ribbon-line"></div>
+      <div class="ribbon-text">— 妖精たちからの贈りもの —</div>
+      <div class="ribbon-line right"></div>
+    </div>
+    <p class="sub">今のあなたに近い気持ちを<br>選んでください 🌸</p>
+  </div>
+
+  <div class="cards">
+    <div class="card card-heal" onclick="draw('heal')">
+      <div class="fairy-wrap"><img src="fairy_rose.png" alt="ローズ妖精"></div>
+      <div class="label">癒されたい</div>
+    </div>
+    <div class="card card-fun" onclick="draw('fun')">
+      <div class="fairy-wrap"><img src="fairy_star.png" alt="スター妖精"></div>
+      <div class="label">ワクワクしたい</div>
+    </div>
+    <div class="card card-go" onclick="draw('go')">
+      <div class="fairy-wrap"><img src="fairy_flame.png" alt="フレイム妖精"></div>
+      <div class="label">前に進みたい</div>
+    </div>
+    <div class="card card-calm" onclick="draw('calm')">
+      <div class="fairy-wrap"><img src="fairy_moon.png" alt="ムーン妖精"></div>
+      <div class="label">落ち着きたい</div>
+    </div>
+    <div class="card card-energy" onclick="draw('energy')">
+      <div class="fairy-wrap"><img src="fairy_clover.png" alt="クローバー妖精"></div>
+      <div class="label">元気がほしい</div>
+    </div>
+    <div class="card card-conf" onclick="draw('confidence')">
+      <div class="fairy-wrap"><img src="fairy_rainbow.png" alt="レインボー妖精"></div>
+      <div class="label">自信がほしい</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESULT PAGE ===== -->
+<div class="page" id="page-result">
+  <div class="result-scene">
+    <div class="result-halo" id="resultHalo"></div>
+    <div class="result-fairy-wrap" id="resultFairy"></div>
+  </div>
+
+  <div class="number-badge-wrap">
+    <div class="number-label">✦ 今日の数字 ✦</div>
+    <div class="number-badge" id="resultNumber"></div>
+  </div>
+
+  <div class="sparkles" id="resultSparkles">
+    <div class="sp" style="background:#f9c8d8;"></div>
+    <div class="sp" style="background:#d8c8f0;"></div>
+    <div class="sp" style="background:#b8e0f4;"></div>
+  </div>
+
+  <div class="message-card" id="messageCard">
+    <span class="deco-quote">"</span>
+    <div class="message-speech" id="resultSpeech"></div>
+    <div class="message-desc" id="resultDesc"></div>
+  </div>
+
+  <button class="back-btn" id="backBtn" onclick="goBack()">
+    <span>🌸 別の妖精にも聞いてみる</span>
+  </button>
+</div>
+
+<script>
+// --- 妖精ごとの専用メッセージデータ ---
+// 続けて引いても同じセリフにならないよう、豊富なバリエーションを用意！
+const fairyData = {
+  heal: {
+    img: 'fairy_rose.png',
+    colors: { halo: 'radial-gradient(circle, #fce8f0 0%, transparent 70%)', num: '#e07090', sp: ['#f9c8d8','#fce8f0','#ffd0e8'] },
+    messages: {
+      1: { speech: "「焦らなくても大丈夫。\nゆっくり深呼吸から始めましょう🌸」", desc: "小さな一歩でも、今日の始まりになるかもしれません。自分のペースを大切にして。" },
+      2: { speech: "「たまには自分を甘やかしてね。\nあなたは十分頑張っているよ✨」", desc: "優しさを少し受け取る時間も大切です。好きなものを食べたり、ご褒美をあげましょう。" },
+      5: { speech: "「温かい飲み物で、\n心にホッとひと息をいれましょう☕」", desc: "日常の中の小さな安らぎを見つけてみてください。心に余白が生まれます。" },
+      7: { speech: "「心のお風呂に\nゆっくり浸かるイメージをしてね🛀」", desc: "リラックスできる空間作りが運気を上げます。心地よい香りを嗅ぐのもおすすめです。" },
+      9: { speech: "「ギュッと握りしめていた手を、\n少しだけ開いてみて🕊️」", desc: "手放すことで心がフワッと軽くなります。完璧じゃなくても大丈夫です。" }
+    }
+  },
+  fun: {
+    img: 'fairy_star.png',
+    colors: { halo: 'radial-gradient(circle, #fef8d0 0%, transparent 70%)', num: '#c09020', sp: ['#fef0b0','#fff8d0','#ffd040'] },
+    messages: {
+      1: { speech: "「キラキラな直感に従ってみて！\nきっと楽しいことが待ってるよ🌟」", desc: "ワクワクする気持ちが、新しい扉を開く鍵になります。気になったら試してみて。" },
+      3: { speech: "「遊び心が最高の魔法だよ！\n今日は何をしようか？🌈」", desc: "楽しいと思えることを1つ選んで行動してみましょう。笑顔が運気を引き寄せます。" },
+      4: { speech: "「いつもと違う道に、\n面白い発見があるかもしれないよ✨」", desc: "少し違うことをすると、新しい風が吹き込みます。帰り道を少し変えるのも吉。" },
+      6: { speech: "「あなたの笑顔が、\n周りも明るく照らすんだよ！😆」", desc: "思い切り楽しむことでエネルギーがチャージされます。声に出して笑ってみて。" },
+      8: { speech: "「面白そう！と思ったら\nすぐに飛び込んでみてね！🚀」", desc: "フットワークの軽さが素敵なご縁や幸運を呼び込みます。迷ったらGOです。" }
+    }
+  },
+  go: {
+    img: 'fairy_flame.png',
+    colors: { halo: 'radial-gradient(circle, #ffe8d0 0%, transparent 70%)', num: '#c06020', sp: ['#ffd0a0','#ffe8c0','#ffb060'] },
+    messages: {
+      2: { speech: "「最初の小さな火種が、\nやがて大きな情熱になるよ！🔥」", desc: "まずは小さく始めてみることが成功の秘訣です。完璧な準備より、はじめの一歩を。" },
+      3: { speech: "「失敗なんてない！\n全部があなたの経験値だよ！💪」", desc: "思い切った挑戦が、あなたを成長させます。転んでも立ち上がれば大丈夫です。" },
+      4: { speech: "「見えないところで、しっかり\n根を張っているから大丈夫！🌱」", desc: "焦らなくても、土台はちゃんと育っています。これまでの努力を信じてください。" },
+      5: { speech: "「変化の風に乗って、\nグンと加速していこう！💨」", desc: "新しいやり方を取り入れる絶好のチャンスです。柔軟な発想が道を拓きます。" },
+      8: { speech: "「あなたの中には、燃え上がるような\nものすごい力があるんだよ！🌋」", desc: "今のあなたが思う以上に、あなたには力があります。自信を持って進んでください。" }
+    }
+  },
+  calm: {
+    img: 'fairy_moon.png',
+    colors: { halo: 'radial-gradient(circle, #e8d8f8 0%, transparent 70%)', num: '#7050a0', sp: ['#d8c8f0','#e8d8f8','#c0a8e0'] },
+    messages: {
+      1: { speech: "「静かな月明かりのように、\n心をしんと静めてみて🌙」", desc: "忙しい情報から少し離れる時間を持つと良いでしょう。デジタルデトックスもおすすめ。" },
+      4: { speech: "「波立つ心も、やがて穏やかに\n落ち着いていくから大丈夫😌」", desc: "今は無理に動かず、流れに身を任せてみて。時間が解決してくれることもあります。" },
+      6: { speech: "「静寂の音に耳をすませて。\n必要な答えはそこにあるわ🌌」", desc: "静かな時間の中にヒントがありそうです。一人の時間を大切に過ごしてください。" },
+      7: { speech: "「暗闇があるからこそ、\n光の美しさが分かるのよ✨」", desc: "ネガティブな感情も大切な自分の一部です。そっと受け入れてあげましょう。" },
+      9: { speech: "「今日あった良いことを、\n一つだけ思い出して眠ってね💤」", desc: "穏やかな眠りが、明日の活力を育てます。今日の自分にお疲れ様を言ってあげて。" }
+    }
+  },
+  energy: {
+    img: 'fairy_clover.png',
+    colors: { halo: 'radial-gradient(circle, #c8f0d8 0%, transparent 70%)', num: '#408050', sp: ['#a0e0b8','#c8f0d0','#80d090'] },
+    messages: {
+      1: { speech: "「四つ葉のクローバーのような、\nラッキーが待ってるよ！🍀」", desc: "元気な挨拶や明るい声が、良い運気を引き寄せます。背筋を伸ばして歩きましょう。" },
+      3: { speech: "「太陽の光をいっぱい浴びて、\nエネルギーチャージ！☀️」", desc: "外の空気を吸うことで、頭も心もスッキリします。少し散歩するのも効果的です。" },
+      5: { speech: "「スキップしたくなるような、\n楽しい気分を大切にね！🎶」", desc: "体を動かすことで、心のエネルギーも湧いてきます。好きな音楽を聴くのも吉。" },
+      6: { speech: "「よく食べて、よく笑うのが\n一番の魔法なんだよ！😋」", desc: "好きなものを美味しく食べることで活力がみなぎります。栄養をしっかり取って。" },
+      8: { speech: "「あなたならできる！\n私が背中をドーンと押してあげる！🙌」", desc: "内から湧き上がるエネルギーを信じて、突き進んでください。勢いが大切です。" }
+    }
+  },
+  confidence: {
+    img: 'fairy_rainbow.png',
+    colors: { halo: 'radial-gradient(circle, #c8e8f8 0%, transparent 70%)', num: '#2070a0', sp: ['#b8e0f4','#d0eeff','#90cce8'] },
+    messages: {
+      2: { speech: "「あなただけの虹色の輝きを、\nもっと世界に見せて！🌈」", desc: "ありのままの自分を表現することで道が開けます。人と違っても、それが魅力です。" },
+      3: { speech: "「雨上がりには、必ず\n綺麗な虹がかかるわ✨」", desc: "今の努力や苦労が、きっと大きな成果につながります。前を向いて進みましょう。" },
+      4: { speech: "「足元をしっかり固めれば、\nもっと高く飛べるよ！🕊️」", desc: "自分の築いてきたものを信じてください。基礎があなたを支えてくれます。" },
+      7: { speech: "「あなたの内側にある宝石は、\nとっても美しいのよ💎」", desc: "自分の直感と感性に自信を持って。あなたの選択は間違っていません。" },
+      9: { speech: "「過去の成功体験が、\n今のあなたを強くするわ👑」", desc: "これまで乗り越えてきた自分を褒めてあげてください。あなたにはその実力があります。" }
+    }
+  }
+};
+
+// 背景のドット生成
+const dotColors = ['#f9c8d8','#fef0b0','#b8eed8','#d8c8f0','#b8e0f4','#fdd0a8'];
+const dots = document.getElementById('bgDots');
+for (let i = 0; i < 22; i++) {
+  const s = document.createElement('span');
+  const size = 6 + Math.random() * 18;
+  s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${dotColors[i%dotColors.length]};animation-duration:${8+Math.random()*14}s;animation-delay:${Math.random()*8}s;`;
+  dots.appendChild(s);
+}
+
+// 連続で同じ数字が出ないように記録する変数
+let lastDrawnNumber = null;
+
+function draw(type) {
+  const main = document.getElementById('page-main');
+  const result = document.getElementById('page-result');
+  const fairy = fairyData[type];
+  
+  // 妖精の持つ数字のリストを取得
+  let availableNumbers = Object.keys(fairy.messages);
+  
+  // 「前回引いた数字」があればリストから除外する（連続被り防止）
+  if (lastDrawnNumber !== null && availableNumbers.includes(String(lastDrawnNumber))) {
+    availableNumbers = availableNumbers.filter(num => num !== String(lastDrawnNumber));
+  }
+  
+  // 残った数字からランダムに1つ選ぶ
+  const randomKey = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
+  lastDrawnNumber = randomKey; // 次回のために記録
+  
+  const msgData = fairy.messages[randomKey];
+  const col = fairy.colors;
+
+  // 結果画面の更新
+  document.getElementById('resultNumber').textContent = randomKey;
+  document.getElementById('resultNumber').style.color = col.num;
+  
+  // セリフと解説をセット（\nを<br>に変換して改行）
+  document.getElementById('resultSpeech').innerHTML = msgData.speech.replace(/\n/g, '<br>');
+  document.getElementById('resultSpeech').style.color = col.num; // セリフを妖精カラーに
+  document.getElementById('resultDesc').textContent = msgData.desc;
+  
+  // 画像とアニメーションのセット
+  document.getElementById('resultFairy').innerHTML = '';
+  const fairyImg = document.createElement('img');
+  fairyImg.src = fairy.img;
+  fairyImg.alt = '妖精';
+  fairyImg.classList.add('fairy-pop');
+  document.getElementById('resultFairy').appendChild(fairyImg);
+  
+  document.getElementById('resultHalo').style.background = col.halo;
+  document.getElementById('messageCard').style.borderTop = `6px solid ${col.sp[0]}`;
+
+  const sps = document.querySelectorAll('.sp');
+  col.sp.forEach((c, i) => { if (sps[i]) sps[i].style.background = c; });
+
+  const btn = document.getElementById('backBtn');
+  btn.style.borderTop = `2.5px solid ${col.sp[0]}`;
+
+  // アニメーション遷移
+  main.classList.add('page-leave');
+  setTimeout(() => {
+    main.style.display = 'none';
+    main.classList.remove('page-leave');
+    result.style.display = 'flex';
+    result.classList.add('page-enter');
+    setTimeout(() => result.classList.remove('page-enter'), 600);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 320);
+}
+
+function goBack() {
+  const main = document.getElementById('page-main');
+  const result = document.getElementById('page-result');
+
+  result.classList.add('page-leave');
+  setTimeout(() => {
+    result.style.display = 'none';
+    result.classList.remove('page-leave');
+    main.style.display = 'block';
+    main.classList.add('page-enter');
+    setTimeout(() => main.classList.remove('page-enter'), 600);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 320);
+}
+</script>
+</body>
+</html>
