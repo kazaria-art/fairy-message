@@ -16,9 +16,9 @@
   --text-main:    #6a5a7a;
   --text-sub:     #9a88aa;
 }
- 
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
 body {
   font-family: 'Zen Maru Gothic', sans-serif;
   background:
@@ -31,7 +31,7 @@ body {
   position: relative;
   color: var(--text-main);
 }
- 
+
 .bg-dots {
   position: fixed;
   inset: 0;
@@ -50,7 +50,7 @@ body {
   50%  { opacity: 0.25; }
   100% { transform: translateY(-100vh) scale(0.6); opacity: 0; }
 }
- 
+
 .page {
   position: relative;
   z-index: 1;
@@ -59,7 +59,7 @@ body {
 }
 #page-main { display: block; }
 #page-result { display: none; }
- 
+
 /* === MAIN PAGE === */
 .main-header {
   text-align: center;
@@ -99,7 +99,7 @@ body {
   color: #c0a0c8;
   letter-spacing: 0.1em;
 }
- 
+
 /* Cards grid */
 .cards {
   display: grid;
@@ -163,7 +163,7 @@ body {
   letter-spacing: 0.03em;
   padding: 0 8px;
 }
- 
+
 /* === RESULT PAGE === */
 #page-result {
   flex-direction: column;
@@ -214,7 +214,7 @@ body {
   0%,100% { transform: translateY(0) rotate(-1deg); }
   50%      { transform: translateY(-12px) rotate(1deg); }
 }
- 
+
 /* Number badge */
 .number-badge-wrap { margin: 16px 0 4px; }
 .number-label {
@@ -240,7 +240,7 @@ body {
 .number-badge.master {
   font-size: 22px;
 }
- 
+
 /* Sparkles */
 .sparkles {
   display: flex;
@@ -258,7 +258,7 @@ body {
   0%,100% { transform: scale(0.6); opacity: 0.3; }
   50%      { transform: scale(1.2); opacity: 1; }
 }
- 
+
 /* Keyword tags */
 .keyword-tags {
   display: flex;
@@ -284,7 +284,7 @@ body {
   from { opacity: 0; transform: scale(0.7); }
   to   { opacity: 1; transform: scale(1); }
 }
- 
+
 /* Message card */
 .message-card {
   background: white;
@@ -330,9 +330,9 @@ body {
   border-top: 1.5px dashed #f0e6f6;
   padding-top: 14px;
 }
- 
- 
- 
+
+
+
 /* Back button */
 .back-btn {
   display: inline-flex;
@@ -356,7 +356,7 @@ body {
   box-shadow: 0 7px 22px rgba(180,140,200,0.28);
 }
 .back-btn:active { transform: scale(0.95); }
- 
+
 /* Page transition */
 .page-enter { animation: page-in 0.55s cubic-bezier(.22,.8,.36,1) forwards; }
 .page-leave { animation: page-out 0.35s ease-in forwards; }
@@ -368,7 +368,7 @@ body {
   from { opacity: 1; transform: scale(1); }
   to   { opacity: 0; transform: scale(1.04); }
 }
- 
+
 /* Deco leaves */
 .deco-leaves {
   position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
@@ -377,9 +377,9 @@ body {
 </style>
 </head>
 <body>
- 
+
 <div class="bg-dots" id="bgDots"></div>
- 
+
 <div class="deco-leaves">
   <svg class="deco-leaf" style="top:-20px;left:-20px;width:160px" viewBox="0 0 120 120">
     <ellipse cx="60" cy="60" rx="55" ry="30" fill="#d8f0c8" transform="rotate(-40 60 60)"/>
@@ -388,7 +388,7 @@ body {
     <ellipse cx="60" cy="60" rx="52" ry="28" fill="#f8d0e8" transform="rotate(30 60 60)"/>
   </svg>
 </div>
- 
+
 <!-- ===== MAIN PAGE ===== -->
 <div class="page" id="page-main">
   <div class="main-header">
@@ -400,7 +400,7 @@ body {
     </div>
     <p class="sub">今のあなたに近い気持ちを<br>選んでください 🌸</p>
   </div>
- 
+
   <div class="cards">
     <div class="card card-heal" onclick="draw('heal')">
       <div class="fairy-wrap"><img src="fairy_rose.png" alt="ローズ妖精"></div>
@@ -428,162 +428,230 @@ body {
     </div>
   </div>
 </div>
- 
+
 <!-- ===== RESULT PAGE ===== -->
 <div class="page" id="page-result">
   <div class="result-scene">
     <div class="result-halo" id="resultHalo"></div>
     <div class="result-fairy-wrap" id="resultFairy"></div>
   </div>
- 
+
   <div class="number-badge-wrap">
     <div class="number-label">✦ 今日の数字 ✦</div>
     <div class="number-badge" id="resultNumber"></div>
   </div>
- 
+
   <div class="sparkles" id="resultSparkles">
     <div class="sp" style="background:#f9c8d8;"></div>
     <div class="sp" style="background:#d8c8f0;"></div>
     <div class="sp" style="background:#b8e0f4;"></div>
   </div>
- 
+
   <div class="keyword-tags" id="resultKeywords"></div>
- 
+
   <div class="message-card" id="messageCard">
     <span class="deco-quote">"</span>
     <div class="message-speech" id="resultSpeech"></div>
     <div class="message-desc" id="resultDesc"></div>
- 
+
   </div>
- 
+
   <button class="back-btn" id="backBtn" onclick="goBack()">
     <span>🌸 別の妖精にも聞いてみる</span>
   </button>
 </div>
- 
+
 <script>
-const fairyData = {
-  heal: {
-    img: 'fairy_rose.png',
-    colors: { halo: 'radial-gradient(circle, #fce8f0 0%, transparent 70%)', num: '#e07090', sp: ['#f9c8d8','#fce8f0','#ffd0e8'] },
-    messages: {
-      2:  { keywords: ['受容性', '調和', '共感力', '感受性', '平和'],
-            speech: "「あなたの優しい感受性は\nとても大切な宝もの🌸」",
-            desc: "自分を後回しにしすぎていませんか？あなたが誰かをサポートできるのは、まずあなた自身が満たされているから。今日は自分を一番に思いやって。" },
-      6:  { keywords: ['愛', '美', '調和とバランス', '優しさ', '育成力'],
-            speech: "「あなたの愛と気遣いが\n周りを温かく包んでいるよ💖」",
-            desc: "責任感が強いあなたへ——少しだけ自分自身も育ててあげてください。美しいものに触れる時間が、心を癒してくれます。" },
-      9:  { keywords: ['共感力', '包容力', '博愛主義', '精神性', '慈しみ'],
-            speech: "「手放すことの美しさを\n今日は感じてみてね🕊️」",
-            desc: "あなたの深い共感力と包容力は本物の才能です。完璧でなくていい。ギュッと握りしめていたものを、そっと解放してあげてください。" },
-      33: { keywords: ['無償の愛', 'ヒーリング力', '貢献力', 'LOVE＆PEACE', '豊かな感性'],
-            speech: "「あなたの中に宇宙ほどの\n愛の光が満ちているわ🌈」",
-            desc: "あなたのヒーリングエネルギーは本物です。ピュアな感性のまま、ただそこにいるだけで周りを癒しています。自分の天然さを大切にして。" }
-    }
+/*
+  数字の意味（PDF準拠）
+  1: 陽・先駆者・行動力・決断力・リーダーシップ・バイタリティ
+  2: 陰・受容性・調和・共感力・感受性・サポート力
+  3: 喜び・ワクワク・無邪気さ・創造性・コミュニケーション・社交性
+  4: 安心・安定・継続力・実直さ・信頼・グランディング
+  5: 自由・変化・好奇心・多芸多才・柔軟性・発展力
+  6: 愛・美・調和とバランス・優しさ・育成力・責任感
+  7: 探究心・洞察力・専門性・哲学的・マイペース・精神性
+  8: パワフル・実行力・組織力・富と成功・達成力・拡大
+  9: 共感力・博愛・包容力・精神性・慈しみ・世界平和
+
+  各妖精のフィルター
+  🌷 heal  （癒し）   ：労い・受容・やさしい肯定
+  ✨ fun   （ワクワク）：はしゃぐ・軽やか・好奇心
+  🔥 go    （前進）   ：燃やす・背中を押す・熱量
+  🌙 calm  （月）     ：静かに見守る・深い洞察
+  🍀 energy（元気）   ：明るく励ます・元気チャージ
+  🌈 conf  （自信）   ：誇りを持たせる・あなたを認める
+*/
+
+const numberMeta = {
+  1: { keywords: ['先駆者', '行動力', '決断力', 'リーダーシップ', 'バイタリティ'] },
+  2: { keywords: ['受容性', '調和', '共感力', '感受性', 'サポート力'] },
+  3: { keywords: ['喜び', 'ワクワク', '無邪気さ', '創造性', 'コミュニケーション'] },
+  4: { keywords: ['安心', '安定', '継続力', '実直さ', 'グランディング'] },
+  5: { keywords: ['自由', '変化', '好奇心', '多芸多才', '発展力'] },
+  6: { keywords: ['愛', '美', '調和とバランス', '優しさ', '育成力'] },
+  7: { keywords: ['探究心', '洞察力', '専門性', '哲学的', '精神性'] },
+  8: { keywords: ['パワフル', '実行力', '組織力', '達成力', '富と成功'] },
+  9: { keywords: ['共感力', '博愛主義', '包容力', '慈しみ', '世界平和'] }
+};
+
+/* ── 54メッセージ ── fairy × number */
+const messages = {
+  heal: { /* 🌷 癒し妖精：労い・受容・やさしい肯定のフィルター */
+    1: { speech: "「その行動力は、\nあなたが生まれ持った光だよ🌸」",
+         desc: "ぐいぐい進む自分を「強引かな」と思うことがあるかも。でも大丈夫。あなたの決断力は誰かを助けるためにある。そのままで十分、素晴らしいよ。" },
+    2: { speech: "「人に優しくできるのは、\nあなたの心が豊かな証拠🌸」",
+         desc: "気遣いすぎて疲れていない？まず自分をいちばんに満たしてあげて。あなたが満たされているほど、周りへの愛もあふれ出してくる。" },
+    3: { speech: "「その笑顔と明るさが、\n誰かの一日を救ってるよ🌸」",
+         desc: "はしゃいだり笑ったりすることを遠慮しなくていい。あなたの無邪気さは、周りの心を解きほぐす本物のヒーリングなんだよ。" },
+    4: { speech: "「コツコツ続けてきたこと、\nちゃんと伝わってるよ🌸」",
+         desc: "真面目に積み上げてきたあなたへ。結果が見えなくても、根はしっかり育っている。今日は自分の努力を、やさしく認めてあげてね。" },
+    5: { speech: "「自由に動けるあなたが、\nとっても眩しいよ🌸」",
+         desc: "いろんなことに興味を持って動き回る自分を、落ち着きがないと感じてない？それはあなたの生命力そのもの。そのまま輝いていいんだよ。" },
+    6: { speech: "「あなたの愛と気遣いが、\n周りを温かく包んでる💖」",
+         desc: "責任感が強くて、いつも誰かのことを考えているあなたへ。たまには自分自身も育ててあげて。美しいものに触れる時間が心を癒してくれる。" },
+    7: { speech: "「深く考えるその心が、\nあなたの一番の宝もの🌸」",
+         desc: "孤独を感じることもあるかもしれない。でも一人でいる豊かさを知っているのはあなたの強さ。その静かな知恵を、どうか大切にしてね。" },
+    8: { speech: "「頑張り続けてきた\nあなたの力、本物だよ🌸」",
+         desc: "タフに動いてきたぶん、少し疲れていない？あなたの実行力はすごい。でも今日だけは、その力をそっと自分に向けて休ませてあげて。" },
+    9: { speech: "「手放すことの美しさを、\n今日は感じてみてね🕊️」",
+         desc: "深い共感力と包容力は、あなたの本物の才能。完璧でなくていい。ギュッと握りしめていたものを、そっと解放してあげると心が軽くなるよ。" }
   },
-  fun: {
-    img: 'fairy_star.png',
-    colors: { halo: 'radial-gradient(circle, #fef8d0 0%, transparent 70%)', num: '#c09020', sp: ['#fef0b0','#fff8d0','#ffd040'] },
-    messages: {
-      3:  { keywords: ['喜び', 'ワクワク', '創造性', 'コミュニケーション', '社交性'],
-            speech: "「永遠の3歳児の心で！\n今日は思い切り遊ぼう🌈」",
-            desc: "楽観的な発想と無邪気さがあなたの最大の魅力です。知性とユーモアを活かして、笑顔が集まる場所を作ってみて。楽しい表現が運気を引き寄せます。" },
-      5:  { keywords: ['自由', '変化', '好奇心', '多芸多才', '冒険'],
-            speech: "「変化の風に乗って\nグンと加速していこう！💨」",
-            desc: "あなたの柔軟な発想力と大胆な行動力が輝く時です。いつもと違う道を選んでみて。華やかな適応力が、あなたに新しい扉を開かせます。" },
-      1:  { keywords: ['先駆者', '開拓精神', '行動力', 'リーダーシップ', 'バイタリティ'],
-            speech: "「最初の一歩を踏み出した人が\n世界を変えてきたんだよ！🌟」",
-            desc: "あなたには生まれながらのエネルギーと瞬発力があります。誰よりも先に動く勇気を持っているのがあなたです。今日、直感を信じて行動してみて。" },
-      11: { keywords: ['直感力', 'シンクロニシティ', 'インスピレーション', '洞察力', 'メッセンジャー'],
-            speech: "「偶然は必然。\nそのときめきが宇宙からのサイン✨」",
-            desc: "あなたの鋭い感覚とインスピレーションは特別なもの。ふと気になったこと、偶然の一致——それはすべてあなたへのメッセージかもしれません。" }
-    }
+
+  fun: { /* ✨ ワクワク妖精：はしゃぐ・軽やか・好奇心のフィルター */
+    1: { speech: "「最初の一歩を踏み出した人が\n世界を変えてきたんだよ！🌟」",
+         desc: "あなたには生まれながらの瞬発力がある！誰よりも先に動く勇気があるのがあなた。迷ったら体を動かして、その直感をそのまま信じて行動してみよ！" },
+    2: { speech: "「あなたの優しさって\nすごい才能なんだよ！✨」",
+         desc: "人の気持ちをさっと読めちゃうのって、実はすごく特別なこと！その共感力でコミュニケーションがどんどん楽しくなる。今日も誰かと話してみよ！" },
+    3: { speech: "「永遠の3歳児の心で！\n今日は思い切り遊ぼう🌈」",
+         desc: "楽観的な発想と無邪気さがあなたの最大の魅力。知性とユーモアを全開にして、笑顔が集まる場所を作ってみよ！楽しい表現が最高の運気を呼ぶよ！" },
+    4: { speech: "「コツコツが実は\n最強の戦略だって知ってた？✨」",
+         desc: "地道にやってきたことって、気づいたらすごいところまで来てる。あなたの継続力はワクワクの土台になってるんだよ。今日の一歩が未来の宝になる！" },
+    5: { speech: "「変化の風に乗って\nグンと加速していこう！💨」",
+         desc: "あなたの柔軟な発想力と大胆さが輝く時！いつもと違う道を選んでみよ。華やかな適応力が新しい扉を開いてくれるよ。ワクワクする方向へ進め！" },
+    6: { speech: "「あなたの笑顔が\n周りも明るく照らすんだよ！😆」",
+         desc: "愛情深くて気配り上手なあなたへ——思い切り楽しむことでエネルギーがチャージされる。好きな人と一緒に笑って、その愛をシェアしてみよ！" },
+    7: { speech: "「偶然は必然！\nそのときめきが宇宙からのサイン✨」",
+         desc: "あなたの鋭い直感とインスピレーションは特別なもの。ふと気になったこと、偶然の一致——それ全部あなたへのサインかも。気になったら即行動！" },
+    8: { speech: "「面白そう！と思ったら\nすぐ飛び込んでみてね！🚀」",
+         desc: "あなたの実行力ってほんとすごい！フットワークの軽さが素敵なご縁と幸運を呼び込む。迷ったらGO！その勢いがそのまま成功につながるよ！" },
+    9: { speech: "「あなたの大きな愛が\n世界をワクワクさせるよ！🌍」",
+         desc: "広い視野と深い共感力を持つあなたへ——その包容力はすごい武器。いろんな人と繋がって、あなたの世界をどんどん広げていこう！" }
   },
-  go: {
-    img: 'fairy_flame.png',
-    colors: { halo: 'radial-gradient(circle, #ffe8d0 0%, transparent 70%)', num: '#c06020', sp: ['#ffd0a0','#ffe8c0','#ffb060'] },
-    messages: {
-      1:  { keywords: ['先駆者', '行動力', '決断力', 'バイタリティ', '正義感'],
-            speech: "「最初の一歩が\n一番大きな力を持っているよ🔥」",
-            desc: "あなたには生まれながらの開拓精神があります。迷ったら動く。あなたのエネルギッシュな力が道を切り開きます。今すぐ踏み出してみて。" },
-      8:  { keywords: ['パワフル', '実行力', '野心家', '富と成功', '決断力'],
-            speech: "「あなたの中に燃える\nものすごい実行力があるよ！🌋」",
-            desc: "組織力と戦略的な思考があなたの武器です。タフに前進し、大きな結果を手にする力があります。循環と拡大のエネルギーを信じて動いてください。" },
-      22: { keywords: ['カリスマ性', '意志力', '達成力', '現実化', '強運'],
-            speech: "「高い理想は\n必ず現実になる。信じ切って！👑」",
-            desc: "あなたが描くビジョンには強いカリスマ性があります。インスピレーションを形にする力を持っているのはあなたです。執着を手放し、意志力で進んでください。" },
-      4:  { keywords: ['安心', '安定', '継続力', '実直さ', 'グランディング'],
-            speech: "「見えないところで\nしっかり根を張ってる。信じて🌱」",
-            desc: "あなたは着実に土台を積み上げてきました。管理力と継続力こそがあなたの強みです。地に足をつけながら、一歩ずつ確かに前へ進んでください。" }
-    }
+
+  go: { /* 🔥 前進妖精：燃やす・背中を押す・熱量のフィルター */
+    1: { speech: "「最初の一歩が\n一番大きな力を持っている🔥」",
+         desc: "開拓精神があなたの本質だ。迷ったら動く——それだけでいい。あなたのエネルギッシュな力が道を切り開く。今すぐ踏み出せ！" },
+    2: { speech: "「あなたのサポート力は\n最高の武器になる🔥」",
+         desc: "繊細さや共感力を「弱さ」と思っていない？とんでもない。人を動かすのはいつも、真心で相手を理解できる力だ。その力で前へ進め。" },
+    3: { speech: "「失敗なんてない！\n全部があなたの経験値だ💪」",
+         desc: "思い切った挑戦がどんどんあなたを成長させる。転んでも笑いながら立ち上がれるのがあなたの強さ。その無邪気さのまま全力でぶつかっていけ！" },
+    4: { speech: "「見えないところで\n根を張ってきた。そろそろ動け🌱」",
+         desc: "着実に土台を積み上げてきた。管理力と継続力はすでにある。あとは一歩踏み出すだけだ。地に足をつけながら、力強く前へ進め。" },
+    5: { speech: "「変化を恐れるな！\nそこに突破口がある💨」",
+         desc: "好奇心と柔軟性があなたの最大の武器。新しいやり方を取り入れろ。発展のチャンスはいつも変化の中にある。大胆に動いていけ！" },
+    6: { speech: "「愛と責任感が\nあなたを最強にする🔥」",
+         desc: "誰かのために動ける力は本物のエネルギーだ。その愛と正義感を燃料にして前進しろ。あなたが守りたいもののために、全力で走れ！" },
+    7: { speech: "「深く考えたなら\n次は動く番だ🔥」",
+         desc: "分析は十分できている。直感も言っているはずだ。あとは動くだけ。完璧な準備を待つより、一歩踏み出す勇気の方がずっと価値がある。" },
+    8: { speech: "「あなたの中に燃える\nものすごい実行力がある🌋」",
+         desc: "組織力と戦略的思考があなたの武器だ。タフに前進し、大きな結果を手にする力がある。循環と拡大のエネルギーを信じて動け！" },
+    9: { speech: "「その大きな愛を\n世界に向けて放て🔥」",
+         desc: "博愛主義のあなたへ——その包容力と慈しみの心は、動いてこそ輝く。夢を抱いて前に進め。あなたの行動が世界を変える力を持っている。" }
   },
-  calm: {
-    img: 'fairy_moon.png',
-    colors: { halo: 'radial-gradient(circle, #e8d8f8 0%, transparent 70%)', num: '#7050a0', sp: ['#d8c8f0','#e8d8f8','#c0a8e0'] },
-    messages: {
-      7:  { keywords: ['探究心', '洞察力', '専門性', '哲学的', 'マイペース'],
-            speech: "「静かな時間の中に\nすべての答えはあるわ🔮」",
-            desc: "あなたの集中力と持久力は本物です。一人でいる豊かさを大切にして。分析力と直感力を組み合わせると、深いところに真実が見えてきます。" },
-      2:  { keywords: ['受容性', '調和', '感受性', '保守力', '平和'],
-            speech: "「波立つ心も\nやがて穏やかに戻っていくから😌」",
-            desc: "あなたの繊細な感受性は特別なギフトです。今は無理に動かず、流れに身を任せていい。汲み取る力とサポート力が、自然と周りを整えていきます。" },
-      9:  { keywords: ['共感力', '精神性', '客観性', '慈しみ', '包容力'],
-            speech: "「今日あった良いことを\n一つだけ思い出して眠ってね💤」",
-            desc: "あなたの博愛的な心は、自分自身にも向けてあげてください。夢と精神性の豊かさが、明日のインスピレーションになります。今夜は穏やかに休んで。" },
-      4:  { keywords: ['安心', '安定', 'グランディング', '真面目', '信頼'],
-            speech: "「地に足をつけた\nあなたは本当に強いよ🌿」",
-            desc: "信用と信頼を積み重ねてきたあなたへ。想定外のことも、実直さと建設的な力があれば乗り越えられます。今日は安心できる場所でゆっくり過ごして。" }
-    }
+
+  calm: { /* 🌙 月の妖精：静かに見守る・深い洞察のフィルター */
+    1: { speech: "「急がなくていい。\nあなたのペースが正しい速さ🌙」",
+         desc: "行動力があるあなたへ——たまに立ち止まって内側の声を聴いてみて。本当に進みたい方向はどこか、月の光の下で静かに確かめてみよう。" },
+    2: { speech: "「波立つ心も\nやがて穏やかに戻っていくから🌙」",
+         desc: "繊細な感受性は特別なギフト。今は無理に動かず、流れに身を任せていい。汲み取る力とサポート力が、自然と周りを整えていく。" },
+    3: { speech: "「その笑顔の奥に\n深い知恵が宿っているよ🌙」",
+         desc: "無邪気さと知性を同時に持つあなたへ。騒いだ後の静かな時間を大切にして。その中に次のインスピレーションが静かに待っている。" },
+    4: { speech: "「地に足をつけた\nあなたは本当に強い🌿」",
+         desc: "信用と信頼を積み重ねてきたあなたへ。想定外のことも、実直さと建設的な力があれば乗り越えられる。今日は安心できる場所でゆっくり過ごして。" },
+    5: { speech: "「変化の中にも\n静かな中心がある🌙」",
+         desc: "自由に動き回るあなたへ——どこへ行っても変わらない自分の軸を持つと、変化がもっと豊かになる。今夜は静かに自分の本質に触れてみて。" },
+    6: { speech: "「静寂の中に\n必要な答えはあるよ🌌」",
+         desc: "愛情深いあなたへ——誰かのためにと動く前に、一人の時間を持ってみて。静かな時間の中にこそ、本当に大切なものが見えてくる。" },
+    7: { speech: "「静かな時間の中に\nすべての答えはあるわ🔮」",
+         desc: "集中力と持久力は本物。一人でいる豊かさを大切にして。分析力と直感力を組み合わせると、深いところに真実が見えてくる。" },
+    8: { speech: "「力は使い続けるより\n満ちる時間も必要🌙」",
+         desc: "実行力があるあなたへ——月が満ち欠けするように、エネルギーにも波がある。今は静かに力を蓄える時間かもしれない。深く休んで、また満ちていこう。" },
+    9: { speech: "「今日あった良いことを\n一つだけ思い出して眠ってね💤」",
+         desc: "博愛的な心を、自分自身にも向けてあげて。夢と精神性の豊かさが、明日のインスピレーションになる。今夜は穏やかに、ゆっくり休んで。" }
   },
-  energy: {
-    img: 'fairy_clover.png',
-    colors: { halo: 'radial-gradient(circle, #c8f0d8 0%, transparent 70%)', num: '#408050', sp: ['#a0e0b8','#c8f0d0','#80d090'] },
-    messages: {
-      1:  { keywords: ['陽', 'バイタリティ', 'エネルギッシュ', '行動力', '瞬発力'],
-            speech: "「四つ葉のラッキーを\n今日のあなたに届けるよ！🍀」",
-            desc: "陽のエネルギーに満ちた今日のあなたへ。背筋を伸ばして、元気な声で話してみて。先駆者の瞬発力が、最高の結果を引き寄せます。" },
-      5:  { keywords: ['自由', 'バイタリティ', '発展力', '好奇心', '柔軟性'],
-            speech: "「スキップしたくなるような\n楽しい風が吹いてきたよ！🎶」",
-            desc: "体を動かすことで、心のエネルギーも一緒に湧いてきます。変化を楽しむあなたの柔軟性が、今日の発展力を高めてくれます。好きな音楽を流してみて。" },
-      3:  { keywords: ['喜び', '楽観的', 'ユーモア', 'コミュニケーション', '社交性'],
-            speech: "「笑い声が\n最強のエネルギーチャージだよ！☀️」",
-            desc: "楽観的な気持ちと無邪気さが、あなたのバイタリティの源です。好きなものを食べて、声に出して笑って。表現力豊かなあなたが輝く日です。" },
-      8:  { keywords: ['パワフル', 'タフ', '実行力', '組織力', '達成力'],
-            speech: "「あなたならできる！\n私が背中をドーンと押してあげる！🙌」",
-            desc: "内から湧き上がる強いエネルギーを信じてください。タフで実践力あるあなたへ——結果を出す力が今まさに頂点にあります。全力で突き進んで。" }
-    }
+
+  energy: { /* 🍀 元気妖精：明るく励ます・元気チャージのフィルター */
+    1: { speech: "「四つ葉のラッキーを\n今日のあなたに届けるよ！🍀」",
+         desc: "陽のエネルギーに満ちた今日のあなたへ。背筋を伸ばして、元気な声で話してみて。先駆者の瞬発力が、最高の結果を引き寄せるよ！" },
+    2: { speech: "「あなたの優しさが\n今日一番の元気の源！🍀」",
+         desc: "人に寄り添える力は最高のエネルギー。誰かに「ありがとう」を言ったり言われたりするだけで、心がぐんとチャージされるよ。今日も笑顔でいこう！" },
+    3: { speech: "「笑い声が\n最強のエネルギーチャージだよ！☀️」",
+         desc: "楽観的な気持ちと無邪気さが、あなたのバイタリティの源。好きなものを食べて、声に出して笑って。表現力豊かなあなたが輝く日！" },
+    4: { speech: "「コツコツの先に\nすごい元気が待ってるよ！🍀」",
+         desc: "着実に進めてきたあなたへ——継続力ってすごいエネルギーを生み出すんだよ。今日の小さな一歩が大きな喜びに変わる日は、もうすぐそこ！" },
+    5: { speech: "「スキップしたくなるような\n楽しい風が吹いてきたよ！🎶」",
+         desc: "体を動かすことで心のエネルギーも一緒に湧いてくる。変化を楽しむ柔軟性が今日の発展力を高めてくれるよ。好きな音楽を流してみて！" },
+    6: { speech: "「よく食べて、よく笑うのが\n一番の魔法だよ！😋」",
+         desc: "愛情深いあなたへ——好きなものを美味しく食べることで活力がみなぎる。大切な人と一緒にご飯を食べると、愛のエネルギーも倍になるよ！" },
+    7: { speech: "「太陽の光を浴びながら\n深く考えてみよう！☀️」",
+         desc: "探究心があるあなたへ——外に出て体を動かしながら考えると、いつもと違うひらめきが来るよ。体と心を同時にチャージして、今日も元気に進もう！" },
+    8: { speech: "「あなたならできる！\n私が背中をドーンと押してあげる！🙌」",
+         desc: "内から湧き上がる強いエネルギーを信じて。タフで実践力あるあなたへ——結果を出す力が今まさに頂点。全力で突き進んでいこう！" },
+    9: { speech: "「あなたの大きな愛が\n元気の根っこだよ！🍀」",
+         desc: "共感力と包容力があるあなたへ——人を思いやる気持ちって、実はいちばん強いエネルギー源。今日も愛いっぱいで元気よく行こう！" }
   },
-  confidence: {
-    img: 'fairy_rainbow.png',
-    colors: { halo: 'radial-gradient(circle, #c8e8f8 0%, transparent 70%)', num: '#2070a0', sp: ['#b8e0f4','#d0eeff','#90cce8'] },
-    messages: {
-      7:  { keywords: ['洞察力', '専門性', '直感力', '完璧主義', '精神性'],
-            speech: "「あなたの内側にある\n深い知性は本物の宝よ💎」",
-            desc: "探究心と分析力に裏付けられた直感力を信じてください。自分の哲学と感性に従っていい。職人気質の持つ揺るぎない専門性が、あなたを輝かせます。" },
-      22: { keywords: ['カリスマ性', '意志力', '高い理想', '現実化', '強運'],
-            speech: "「あなたのビジョンは\n必ず形になる——信じ切って！🌈」",
-            desc: "あなたには強運とカリスマ性が備わっています。高い理想を持ち続けることで、インスピレーションが現実へと変わっていきます。今のあなたの力を信じて。" },
-      4:  { keywords: ['自立心', '信用', '信頼', '実直さ', '建設的'],
-            speech: "「コツコツ積み上げてきた\nすべてがあなたの自信の土台よ🏆」",
-            desc: "継続力と誠実さで築いてきたものは本物です。グランディングされたあなたの軸は、どんな時もぶれません。これまでの努力と自分自身を、もっと信じて。" },
-      1:  { keywords: ['先駆者', 'リーダーシップ', '自立心', '決断力', '正義感'],
-            speech: "「あなたが1番に\nなれる理由がちゃんとある！✨」",
-            desc: "生まれながらのリーダーシップと正義感があなたの誇りです。自己中心的と言われても、まず自分を信じることが先駆者への道。エネルギッシュに進んで。" }
-    }
+
+  confidence: { /* 🌈 自信妖精：誇りを持たせる・あなたを認めるフィルター */
+    1: { speech: "「あなたが1番に\nなれる理由がちゃんとある！✨」",
+         desc: "生まれながらのリーダーシップと正義感があなたの誇り。まず自分を信じることが先駆者への道。その決断力と行動力を、もっと誇っていい。" },
+    2: { speech: "「あなただけの虹色の輝きを\nもっと世界に見せて！🌈」",
+         desc: "ありのままの優しさと共感力を表現することで道が開ける。人と違う繊細さも、それがあなたの最大の魅力。自分らしさを誇りに思っていい。" },
+    3: { speech: "「雨上がりには\n必ず綺麗な虹がかかるよ✨」",
+         desc: "今の楽観的なあなたが積み重ねてきたことは、きっと大きな成果につながる。その明るさと創造性は、誰にも真似できない本物の才能。" },
+    4: { speech: "「コツコツ積み上げてきた\nすべてがあなたの自信の土台よ🏆」",
+         desc: "継続力と誠実さで築いてきたものは本物。グランディングされたあなたの軸はどんな時もぶれない。これまでの努力を、もっと誇っていい。" },
+    5: { speech: "「足元をしっかり固めれば\nもっと高く飛べるよ！🕊️」",
+         desc: "自由な発想と行動力があなたの翼。そこに少しだけ自分軸を加えると、どこまでも飛べる。あなたの多芸多才は本物の宝物だよ。" },
+    6: { speech: "「あなたの愛と責任感は\n誰かの光になっている🌈」",
+         desc: "育てる力、気配りの力——それはすごい才能。あなたが与えてきた愛は、ちゃんと誰かの心に根を張っている。その優しさを誇りに思っていい。" },
+    7: { speech: "「あなたの内側にある\n深い知性は本物の宝よ💎」",
+         desc: "探究心と分析力に裏付けられた直感力を信じて。自分の哲学と感性に従っていい。職人気質の揺るぎない専門性が、あなたを唯一無二にしている。" },
+    8: { speech: "「過去の成功体験が\n今のあなたを強くするよ👑」",
+         desc: "これまで乗り越えてきた自分を褒めてあげて。パワフルな実行力と達成力はすでに証明済み。あなたにはそれだけの実力が、もうある。" },
+    9: { speech: "「あなたの包容力は\n世界が必要としているよ🌈」",
+         desc: "博愛的な精神と深い共感力——それはあなただけが持つ誇り。慈しみの心を持ち続けるあなたは、それだけで世界に必要な存在だよ。" }
   }
 };
- 
+
+/* 妖精ごとの見た目設定のみ。メッセージは messages[fairy][num] で参照 */
+const fairyData = {
+  heal:       { img: 'fairy_rose.png',    colors: { halo: 'radial-gradient(circle, #fce8f0 0%, transparent 70%)', num: '#e07090', sp: ['#f9c8d8','#fce8f0','#ffd0e8'] } },
+  fun:        { img: 'fairy_star.png',    colors: { halo: 'radial-gradient(circle, #fef8d0 0%, transparent 70%)', num: '#c09020', sp: ['#fef0b0','#fff8d0','#ffd040'] } },
+  go:         { img: 'fairy_flame.png',   colors: { halo: 'radial-gradient(circle, #ffe8d0 0%, transparent 70%)', num: '#c06020', sp: ['#ffd0a0','#ffe8c0','#ffb060'] } },
+  calm:       { img: 'fairy_moon.png',    colors: { halo: 'radial-gradient(circle, #e8d8f8 0%, transparent 70%)', num: '#7050a0', sp: ['#d8c8f0','#e8d8f8','#c0a8e0'] } },
+  energy:     { img: 'fairy_clover.png',  colors: { halo: 'radial-gradient(circle, #c8f0d8 0%, transparent 70%)', num: '#408050', sp: ['#a0e0b8','#c8f0d0','#80d090'] } },
+  confidence: { img: 'fairy_rainbow.png', colors: { halo: 'radial-gradient(circle, #c8e8f8 0%, transparent 70%)', num: '#2070a0', sp: ['#b8e0f4','#d0eeff','#90cce8'] } }
+};
+
 /*
-  抽選ロジック：数字単位のグローバル履歴で均等化
- 
-  - numberDrawCount[数字] = その数字が引かれた合計回数（全カード横断）
-  - カード固有の数字リストの中で、最も引かれた回数が少ない数字を優先
-  - 同点の場合はランダムに選ぶ
-  - これにより「同じカードを連打」でも「ランダムにカードを押す」でも
-    数字が均等に出現するようになる
+  抽選ロジック：1〜9 をグローバルに均等化
+  - numberDrawCount[n] = その数字が引かれた累計回数（全妖精横断）
+  - どの妖精を押しても 1〜9 の中から最も少ない回数の数字を優先して選ぶ
+  - 同点はランダム → 連打でも、ランダム操作でも均等に 1〜9 が出る
 */
+const ALL_NUMBERS = [1,2,3,4,5,6,7,8,9];
 const numberDrawCount = {};
- 
+
+function pickNumber() {
+  const counts = ALL_NUMBERS.map(n => ({ n, c: numberDrawCount[n] || 0 }));
+  const min = Math.min(...counts.map(x => x.c));
+  const candidates = counts.filter(x => x.c === min).map(x => x.n);
+  const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+  numberDrawCount[chosen] = (numberDrawCount[chosen] || 0) + 1;
+  return chosen;
+}
+
 const dotColors = ['#f9c8d8','#fef0b0','#b8eed8','#d8c8f0','#b8e0f4','#fdd0a8'];
 const dots = document.getElementById('bgDots');
 for (let i = 0; i < 22; i++) {
@@ -592,17 +660,7 @@ for (let i = 0; i < 22; i++) {
   s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:${dotColors[i%dotColors.length]};animation-duration:${8+Math.random()*14}s;animation-delay:${Math.random()*8}s;`;
   dots.appendChild(s);
 }
- 
-function pickNumber(keys) {
-  // 各キーの引かれた回数を確認し、最小回数のものを候補とする
-  const counts = keys.map(k => ({ k, n: numberDrawCount[k] || 0 }));
-  const minCount = Math.min(...counts.map(x => x.n));
-  const candidates = counts.filter(x => x.n === minCount).map(x => x.k);
-  const chosen = candidates[Math.floor(Math.random() * candidates.length)];
-  numberDrawCount[chosen] = (numberDrawCount[chosen] || 0) + 1;
-  return chosen;
-}
- 
+
 function playFairySound(type) {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
@@ -633,34 +691,34 @@ function playFairySound(type) {
     osc.stop(time + sustain);
   });
 }
- 
+
 function draw(type) {
   playFairySound(type);
- 
-  const main = document.getElementById('page-main');
+
+  const main   = document.getElementById('page-main');
   const result = document.getElementById('page-result');
-  const fairy = fairyData[type];
-  const keys = Object.keys(fairy.messages);
- 
-  const chosenKey = pickNumber(keys);
-  const msgData = fairy.messages[chosenKey];
-  const col = fairy.colors;
- 
-  // Number badge
+  const fairy  = fairyData[type];
+  const col    = fairy.colors;
+
+  const num    = pickNumber();                  // 1〜9 均等抽選
+  const meta   = numberMeta[num];               // キーワード
+  const msgData = messages[type][num];          // 妖精×数字のメッセージ
+
+  // Number badge（1桁なので master クラス不要）
   const badge = document.getElementById('resultNumber');
-  badge.textContent = chosenKey;
+  badge.textContent = num;
   badge.style.color = col.num;
-  badge.className = 'number-badge' + (String(chosenKey).length > 1 ? ' master' : '');
- 
+  badge.className = 'number-badge';
+
   // Speech & desc
   document.getElementById('resultSpeech').innerHTML = msgData.speech.replace(/\n/g, '<br>');
   document.getElementById('resultSpeech').style.color = col.num;
   document.getElementById('resultDesc').textContent = msgData.desc;
- 
-  // Keyword tags
+
+  // Keyword tags（numberMeta から取得）
   const tagsContainer = document.getElementById('resultKeywords');
   tagsContainer.innerHTML = '';
-  msgData.keywords.forEach((kw, i) => {
+  meta.keywords.forEach((kw, i) => {
     const tag = document.createElement('span');
     tag.className = 'keyword-tag';
     tag.textContent = kw;
@@ -668,7 +726,7 @@ function draw(type) {
     tag.style.animationDelay = (i * 0.07) + 's';
     tagsContainer.appendChild(tag);
   });
- 
+
   // Fairy image
   document.getElementById('resultFairy').innerHTML = '';
   const fairyImg = document.createElement('img');
@@ -676,12 +734,12 @@ function draw(type) {
   fairyImg.alt = '妖精';
   fairyImg.classList.add('fairy-pop');
   document.getElementById('resultFairy').appendChild(fairyImg);
- 
+
   document.getElementById('resultHalo').style.background = col.halo;
- 
+
   const sps = document.querySelectorAll('.sp');
   col.sp.forEach((c, i) => { if (sps[i]) sps[i].style.background = c; });
- 
+
   main.classList.add('page-leave');
   setTimeout(() => {
     main.style.display = 'none';
@@ -692,9 +750,9 @@ function draw(type) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, 320);
 }
- 
+
 function goBack() {
-  const main = document.getElementById('page-main');
+  const main   = document.getElementById('page-main');
   const result = document.getElementById('page-result');
   result.classList.add('page-leave');
   setTimeout(() => {
